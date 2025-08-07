@@ -1,29 +1,46 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { createTables } from '@/database/db';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import ProfileScreen from './screens/ProfileScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import HomeStack from './stack/HomeStack';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const Drawer = createDrawerNavigator();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [initialRouteName, setInitialRouteName] = useState<string | null>(null);
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
+  useEffect(() => {
+    (async () => {
+      const profile = await AsyncStorage.getItem('userProfile');
+
+      setInitialRouteName(profile ? 'home' : 'profile');
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await createTables();
+    })();
+  }, []);
+
+  if (!initialRouteName) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Drawer.Navigator initialRouteName={initialRouteName} screenOptions={{
+      headerShown: false
+    }}>
+      <Drawer.Screen name='home' options={{ title: 'Home' }} component={HomeStack} />
+      <Drawer.Screen name='profile' options={{ title: 'Profile' }} component={ProfileScreen} />
+      <Drawer.Screen name='settings' options={{ title: 'Settings' }} component={SettingsScreen} />
+    </Drawer.Navigator>
   );
 }
