@@ -1,9 +1,16 @@
-import { Task } from '@/constants/Task';
-import * as SQLite from 'expo-sqlite';
+import { Task } from "@/constants/Task";
+import * as SQLite from "expo-sqlite";
 
+let db: SQLite.SQLiteDatabase | null = null;
+export const getDB = async () => {
+  if (!db) {
+    db = await SQLite.openDatabaseAsync("tasks");
+  }
+  return db;
+};
 export const createTables = async () => {
-    const db = await SQLite.openDatabaseAsync('tasks');
-    await db.execAsync(`
+  const db = await getDB();
+  await db.execAsync(`
         CREATE TABLE IF NOT EXISTS tasks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
@@ -13,9 +20,11 @@ export const createTables = async () => {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         `);
-    const existing = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM tasks');
-    if (existing?.count === 0) {
-        await db.execAsync(`
+  const existing = await db.getFirstAsync<{ count: number }>(
+    "SELECT COUNT(*) as count FROM tasks"
+  );
+  if (existing?.count === 0) {
+    await db.execAsync(`
             INSERT INTO tasks (title, description, is_completed, deadline)
             VALUES
                 ('Buy groceries', 'Milk, Eggs, Bread, Fruits', 0, '2025-08-10 18:00:00'),
@@ -24,14 +33,41 @@ export const createTables = async () => {
                 ('Call mom', 'Weekly check-in call', 1, '2025-08-06 20:00:00'),
                 ('Plan weekend trip', 'Look for places to visit on Saturday and Sunday', 0, '2025-08-09 10:00:00');
         `);
-    }
-}
+  }
+};
 
-export const fetchTasks = async (filter: 'all' | 'completed' | 'uncompleted') => {
-    const db = await SQLite.openDatabaseAsync('tasks');
-    let query = 'SELECT * FROM tasks';
-    if (filter === 'completed') query += ' WHERE is_completed = 1';
-    else if (filter === 'uncompleted') query += ' WHERE is_completed = 0';
-    const data = await db.getAllAsync<Task>(query);
-    return data;
-}
+export const fetchTasks = async (
+  filter: "all" | "completed" | "uncompleted"
+) => {
+  const db = await getDB();
+  let query = "SELECT * FROM tasks";
+  if (filter === "completed") query += " WHERE is_completed = 1";
+  else if (filter === "uncompleted") query += " WHERE is_completed = 0";
+  const data = await db.getAllAsync<Task>(query);
+  return data;
+};
+
+export const fetchTaskById = async (taskId: number) => {
+  const db = await getDB();
+  const data = await db.getFirstAsync<Task>(
+    "SELECT * FROM tasks WHERE id = ?",
+    [taskId]
+  );
+  return data;
+};
+
+export const deleteTask = async (taskId: number) => {
+  const db = await getDB();
+  await db.runAsync("DELETE FROM tasks WHERE id = ?", taskId);
+};
+
+export const updateTaskStatus = async (
+  taskId: number,
+  isCompleted: boolean
+) => {
+  const db = await getDB();
+  await db.runAsync("UPDATE tasks SET is_completed = ? WHERE id = ?", [
+    isCompleted ? 1 : 0,
+    taskId,
+  ]);
+};
