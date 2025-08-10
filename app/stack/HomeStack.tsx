@@ -2,10 +2,12 @@ import { store } from "@/store/store";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider } from "react-redux";
 import HomeScreen from "../screens/HomeScreen";
+import NewsScreen from "../screens/NewsScreen";
 import NotesListScreen from "../screens/NotesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TaskDetailScreen from "../screens/TaskDetailScreen";
 import TasksScreen from "../screens/TasksScreen";
+import WeatherScreen from "../screens/WeatherScreen";
 
 const MyStack = createStackNavigator();
 export default function HomeStack() {
@@ -36,6 +38,16 @@ export default function HomeStack() {
           name="notes"
           component={NotesListScreen}
           options={{ title: "Notes" }}
+        />
+        <MyStack.Screen
+          name="weather"
+          component={WeatherScreen}
+          options={{ title: "Weather Forecast" }}
+        />
+        <MyStack.Screen
+          name="news"
+          component={NewsScreen}
+          options={{ title: "News" }}
         />
       </MyStack.Navigator>
     </Provider>

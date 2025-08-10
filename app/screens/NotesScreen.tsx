@@ -6,13 +6,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Guid } from "js-guid";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Animated,
-    PanResponder,
-    PanResponderGestureState,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    View,
+  Animated,
+  Dimensions,
+  PanResponder,
+  PanResponderGestureState,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const STORAGE_KEY = "NOTES";
 
@@ -22,22 +24,27 @@ const NotesListScreen = () => {
   const [zIndexCounter, setZIndexCounter] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
   const [noteToEdit, setNoteToEdit] = useState<Note | null>(null);
+  const noteSizes = useRef<Record<string, { width: number; height: number }>>(
+    {}
+  );
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     loadNotes();
   }, []);
-
   const loadNotes = async () => {
     const json = await AsyncStorage.getItem(STORAGE_KEY);
     if (json) {
       const savedNotes: Note[] = JSON.parse(json);
-      setNotes(savedNotes);
       savedNotes.forEach((note) => {
         positions.current[note.id] = new Animated.ValueXY({
           x: note.x,
           y: note.y,
         });
       });
+      setNotes(savedNotes);
     }
   };
 
@@ -73,8 +80,21 @@ const NotesListScreen = () => {
       onPanResponderRelease: (_, gesture: PanResponderGestureState) => {
         positions.current[note.id].flattenOffset();
 
-        const newX = (positions.current[note.id].x as any).__getValue();
-        const newY = (positions.current[note.id].y as any).__getValue();
+        let newX = (positions.current[note.id].x as any).__getValue();
+        let newY = (positions.current[note.id].y as any).__getValue();
+
+        const size = noteSizes.current[note.id] || { width: 100, height: 100 };
+        const minX = -noteSizes.current[note.id].width / 2;
+        const maxX = windowWidth - size.width+ noteSizes.current[note.id].width / 2;
+        const headerHeight = 56;
+        const minY = -noteSizes.current[note.id].height/2;
+        const maxY = windowHeight - headerHeight - insets.bottom - size.height;
+        if (newX < minX) newX = minX;
+        if (newX > maxX) newX = maxX;
+        if (newY < minY) newY = minY;
+        if (newY > maxY) newY = maxY;
+        positions.current[note.id].setValue({ x: newX, y: newY });
+
 
         const updatedNotes = notes.map((n) =>
           n.id === note.id ? { ...n, x: newX, y: newY } : n
@@ -135,6 +155,10 @@ const NotesListScreen = () => {
       setNotes((prev) => [...prev, newNote]);
     }
   };
+
+  const onLayout = (id: string, width: number, height: number) => {
+    noteSizes.current[id] = { width, height };
+  };
   const renderNotes = () =>
     notes.map((note) => {
       if (!positions.current[note.id]) {
@@ -148,6 +172,7 @@ const NotesListScreen = () => {
 
       return (
         <NoteContainer
+          onLayout={onLayout}
           key={note.id}
           note={note}
           onLongPress={handleLongPress}
@@ -167,7 +192,7 @@ const NotesListScreen = () => {
         <NoteModal
           onClose={() => {
             setNoteToEdit(null);
-            setModalVisible(false)
+            setModalVisible(false);
           }}
           onSave={handleSaveNote}
           visible={modalVisible}

@@ -1,20 +1,37 @@
 import { Note } from "@/constants/Note";
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface NoteContainerProps {
-    note: Note;
-    onLongPress: (id: string) => void;
-    onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
-    transformPosition: any;
-    panResponder: any;
+  note: Note;
+  onLongPress: (id: string) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onLayout: (id: string, width: number, height: number) => void;
+  transformPosition: any;
+  panResponder: any;
 }
 
-
-export default function NoteContainer({ note, onLongPress, onEdit, onDelete, transformPosition, panResponder }: NoteContainerProps) {
+export default function NoteContainer({
+  note,
+  onLongPress,
+  onEdit,
+  onDelete,
+  onLayout,
+  transformPosition,
+  panResponder,
+}: NoteContainerProps) {
   return (
     <Animated.View
+      onLayout={(e) => {
+        const { width, height } = e.nativeEvent.layout;
+        onLayout?.(note.id, width, height);
+      }}
       {...panResponder.panHandlers}
       style={[
         styles.note,
@@ -24,7 +41,9 @@ export default function NoteContainer({ note, onLongPress, onEdit, onDelete, tra
         },
       ]}
     >
-      <Text style={{fontSize:20}} onLongPress={() => onLongPress(note.id)}>{note.title}</Text>
+      <Text style={{ fontSize: 20 }} onLongPress={() => onLongPress(note.id)}>
+        {note.title}
+      </Text>
       {note.isEditing && (
         <View style={styles.buttons}>
           <TouchableOpacity onPress={() => onEdit(note.id)}>
@@ -39,18 +58,13 @@ export default function NoteContainer({ note, onLongPress, onEdit, onDelete, tra
   );
 }
 
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f8ff",
-  },
   note: {
     position: "absolute",
-    backgroundColor: "#ffe4b5",
+    backgroundColor: "#ffde4df3",
     padding: 16,
-    borderColor: 'black',
-    borderWidth:1,
+    borderColor: "black",
+    borderWidth: 1,
     borderRadius: 8,
     shadowColor: "#000",
     shadowOpacity: 0.3,
