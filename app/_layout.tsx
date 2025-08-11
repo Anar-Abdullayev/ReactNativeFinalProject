@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import HomeStack from './stack/HomeStack';
+import { Ionicons } from '@expo/vector-icons';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,11 +37,18 @@ export default function RootLayout() {
 
   return (
     <Drawer.Navigator initialRouteName={initialRouteName} screenOptions={{
-      headerShown: false
+      headerShown: false,
+      drawerLabelStyle: {
+        fontSize: 20
+      }
     }}>
-      <Drawer.Screen name='home' options={{ title: 'Home' }} component={HomeStack} />
-      <Drawer.Screen name='profile' options={{ title: 'Profile' }} component={ProfileScreen} />
-      <Drawer.Screen name='settings' options={{ title: 'Settings' }} component={SettingsScreen} />
+
+      <Drawer.Screen name='home' options={{
+        title: 'Home', drawerIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />
+      }} component={HomeStack} />
+
+      <Drawer.Screen name='profile' options={{ title: 'Profile', drawerIcon: ({ color, size }) => <Ionicons name="person-circle-outline" size={size} color={color} /> }} component={ProfileScreen} />
+      <Drawer.Screen name='settings' options={{ title: 'Settings', drawerIcon: ({ color, size }) => <Ionicons name="settings-outline" size={size} color={color} /> }} component={SettingsScreen} />
     </Drawer.Navigator>
   );
 }
