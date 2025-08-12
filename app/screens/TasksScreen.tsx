@@ -8,7 +8,11 @@ import { FlatList, View } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useTranslation } from 'react-i18next';
+import '../../lib/translation';
+
 export default function TasksListScreen({navigation}:any) {
+  const { t } = useTranslation();
   const tasks = useSelector((state: RootState) => state.tasks.list);
   const dispatch = useDispatch();
   const [filter, setFilter] = useState<"all" | "completed" | "uncompleted">(
@@ -41,7 +45,7 @@ export default function TasksListScreen({navigation}:any) {
 
 
 const TaskFilterHeader = ({filter, setFilter}: any) => {
-
+  const { t } = useTranslation();
   return (
     <View
         style={{
@@ -54,19 +58,19 @@ const TaskFilterHeader = ({filter, setFilter}: any) => {
           mode={filter === "all" ? "contained" : "outlined"}
           onPress={() => setFilter("all")}
         >
-          All
+          {t('allTasks')}
         </Button>
         <Button
           mode={filter === "completed" ? "contained" : "outlined"}
           onPress={() => setFilter("completed")}
         >
-          Completed
+          {t('completedTasks')}
         </Button>
         <Button
           mode={filter === "uncompleted" ? "contained" : "outlined"}
           onPress={() => setFilter("uncompleted")}
         >
-          Pending
+          {t('uncompletedTasks')}
         </Button>
       </View>
   )

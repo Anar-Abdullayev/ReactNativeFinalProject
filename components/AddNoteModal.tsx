@@ -11,6 +11,9 @@ import {
   View,
 } from "react-native";
 
+import { useTranslation } from 'react-i18next';
+import '../lib/translation';
+
 type Props = {
   visible: boolean;
   onClose: () => void;
@@ -24,6 +27,7 @@ export default function NoteModal({
   onSave,
   noteToEdit,
 }: Props) {
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -60,17 +64,17 @@ export default function NoteModal({
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.heading}>
-            {noteToEdit ? "Edit Note" : "Add Note"}
+            {noteToEdit ? t('headerEditNote') : t('headerAddNote')}
           </Text>
 
           <TextInput
-            placeholder="Title"
+            placeholder={t('titlePlaceholder')}
             style={styles.input}
             value={title}
             onChangeText={setTitle}
           />
           <TextInput
-            placeholder="Description"
+            placeholder={t('descriptionPlaceholder')}
             style={[styles.input, styles.multilineInput]}
             value={description}
             onChangeText={setDescription}
@@ -82,14 +86,14 @@ export default function NoteModal({
               style={[styles.button, styles.cancel]}
               onPress={onClose}
             >
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>{t('btnCancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.save]}
               onPress={handleSave}
             >
               <Text style={styles.buttonText}>
-                {noteToEdit ? "Update" : "Save"}
+                {noteToEdit ? t('btnUpdate') : t('btnAdd')}
               </Text>
             </TouchableOpacity>
           </View>

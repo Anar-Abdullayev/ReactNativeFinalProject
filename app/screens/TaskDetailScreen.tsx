@@ -3,9 +3,11 @@ import { tasksService } from "@/database/db";
 import { removeTask, updateTask } from "@/store/tasks/tasksSlice";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from "react-native";
 import { Button, Card, Chip, Text } from "react-native-paper";
 import { useDispatch } from "react-redux";
+import '../../lib/translation';
 
 type RootStackParamList = {
   TaskDetail: { taskId: number };
@@ -14,6 +16,7 @@ type RootStackParamList = {
 type TaskDetailRouteProp = RouteProp<RootStackParamList, "TaskDetail">;
 
 export default function TaskDetailScreen() {
+  const { t } = useTranslation();
   const route = useRoute<TaskDetailRouteProp>();
   const navigation = useNavigation<any>();
   const { taskId } = route.params;
@@ -68,13 +71,13 @@ export default function TaskDetailScreen() {
                 color: task.is_completed ? "green" : "red",
               }}
             >
-              {task.is_completed ? "Done" : "Pending"}
+              {task.is_completed ? t('completedStatus') : t('pendingStatus')}
             </Chip>
           </View>
 
           {task.deadline && (
             <Text variant="bodyMedium" style={{ marginTop: 8 }}>
-              Deadline: {task.deadline}
+              {t('deadline')}: {task.deadline}
             </Text>
           )}
 
@@ -97,7 +100,7 @@ export default function TaskDetailScreen() {
           mode={task.is_completed ? "outlined" : "contained"}
           onPress={handleToggleComplete}
         >
-          {task.is_completed ? "Mark as Pending" : "Mark as Done"}
+          {task.is_completed ? t('markAsPending') : t('markAsDone')}
         </Button>
 
         <Button
@@ -106,7 +109,7 @@ export default function TaskDetailScreen() {
           textColor="red"
           onPress={handleDelete}
         >
-          Delete
+          {t('btnDelete')}
         </Button>
       </View>
     </ScrollView>

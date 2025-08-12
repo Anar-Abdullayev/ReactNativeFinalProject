@@ -1,0 +1,57 @@
+{
+    "welcome": "Welcome",
+    
+
+    "notesLabel": "Notes",
+    "weatherLabel": "Weather Forecast",
+    "tasksLabel": "Tasks",
+    "newTaskLabel": "New Task",
+    "newsLabel": "News",
+    "detailsLabel": "Details",
+    "profileLabel": "Profile",
+
+
+    "headerAddNote": "Add Note",
+    "headerEditNote": "Edit Note",
+
+
+    "weatherCityPlaceholder": "Search city...",
+    "feelsLike": "Feels like",
+    "humidity": "Humidity",
+    "pressure": "Pressure",
+    "windSpeed": "Wind Speed",
+    "sunrise": "Sunrise",
+    "sunset": "Sunset",
+
+
+    "allTasks": "All",
+    "completedTasks": "Completed",
+    "uncompletedTasks": "Pending",
+    "completedStatus": "Done",
+    "pendingStatus": "Pending",
+    "deadline": "Deadline",
+    "markAsPending": "Mark as Pending",
+    "markAsDone": "Mark as Done",
+    "taskStatusLabel": "Task Status",
+
+
+    "newsSearchPlaceholder": "Search news...",
+
+
+    "changePhoto": "Change Photo",
+    "namePlaceholder": "Name",
+    "surnamePlaceholder": "Surname",
+
+
+    "titlePlaceholder": "Title",
+    "descriptionPlaceholder": "Description",
+    "noDeadlinePlaceholder": "No deadline",
+
+
+    "btnCancel": "Cancel",
+    "btnSave": "Save",
+    "btnAdd": "Add",
+    "btnUpdate": "Update",
+    "btnDelete": "Delete",
+    "btnSearch": "Search"
+}

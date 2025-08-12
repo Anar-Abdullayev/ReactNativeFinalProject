@@ -20,7 +20,11 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useTranslation } from 'react-i18next';
+import '../../lib/translation';
+
 export default function WeatherApp() {
+  const { t } = useTranslation();
   const [query, setQuery] = useState<string>("");
   const { suggestions, weatherData } = useSelector(
     (state: any) => state.weather
@@ -47,7 +51,7 @@ export default function WeatherApp() {
           <View>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search city..."
+              placeholder={t('weatherCityPlaceholder')}
               value={query}
               onChangeText={fetchCitySuggestions}
             />
@@ -91,7 +95,7 @@ export default function WeatherApp() {
             />
             <Text style={styles.temp}>{Math.round(weatherData.main.temp)}°C</Text>
             <Text style={styles.feelsLike}>
-              Feels like {Math.round(weatherData.main.feels_like)}°C
+              {t('feelsLike')} {Math.round(weatherData.main.feels_like)}°C
             </Text>
             <Text style={styles.description}>
               {weatherData.weather[0].description}
@@ -99,30 +103,30 @@ export default function WeatherApp() {
 
             <View style={styles.infoContainer}>
               <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Humidity</Text>
+                <Text style={styles.infoLabel}>{t('humidity')}</Text>
                 <Text style={styles.infoValue}>{weatherData.main.humidity}%</Text>
               </View>
               <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Pressure</Text>
+                <Text style={styles.infoLabel}>{t('pressure')}</Text>
                 <Text style={styles.infoValue}>
                   {weatherData.main.pressure} hPa
                 </Text>
               </View>
               <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Wind</Text>
+                <Text style={styles.infoLabel}>{t('windSpeed')}</Text>
                 <Text style={styles.infoValue}>{weatherData.wind.speed} m/s</Text>
               </View>
             </View>
 
             <View style={styles.infoContainer}>
               <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Sunrise</Text>
+                <Text style={styles.infoLabel}>{t('sunrise')}</Text>
                 <Text style={styles.infoValue}>
                   {formatTime(weatherData.sys.sunrise)}
                 </Text>
               </View>
               <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Sunset</Text>
+                <Text style={styles.infoLabel}>{t('sunset')}</Text>
                 <Text style={styles.infoValue}>
                   {formatTime(weatherData.sys.sunset)}
                 </Text>

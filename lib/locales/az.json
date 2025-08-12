@@ -1,0 +1,57 @@
+{
+    "welcome": "Xoş gəlmisiniz",
+    
+
+    "notesLabel": "Qeydlər",
+    "weatherLabel": "Hava durumu",
+    "tasksLabel": "Tapşırıqlar",
+    "newTaskLabel": "Yeni tapşırıq",
+    "newsLabel": "Xəbərlər",
+    "detailsLabel": "Ətraflı məlumat",
+    "profileLabel": "Profil",
+
+
+    "headerAddNote": "Qeyd əlavə et",
+    "headerEditNote": "Qeyd redaktə et",
+
+
+    "weatherCityPlaceholder": "Şəhər adını daxil edin...",
+    "feelsLike": "Hiss olunur",
+    "humidity": "Rütubət",
+    "pressure": "Təzyiq",
+    "windSpeed": "Külək sürəti",
+    "sunrise": "Günəş doğması",
+    "sunset": "Günəş batması",
+
+
+    "allTasks": "Bütün",
+    "completedTasks": "Tamamlanmış",
+    "uncompletedTasks": "Tamamlanmamış",
+    "completedStatus": "Bitti",
+    "pendingStatus": "Gözləyir",
+    "deadline": "Son tarix",
+    "markAsPending": "Gözləyir kimi işarələ",
+    "markAsDone": "Bitmiş kimi işarələ",
+    "taskStatusLabel": "Tapşırıq statusu",
+
+
+    "newsSearchPlaceholder": "Xəbərləri axtarın...",
+
+
+    "changePhoto": "Şəkli dəyişdir",
+    "namePlaceholder": "Ad",
+    "surnamePlaceholder": "Soyad",
+
+
+    "titlePlaceholder": "Başlıq",
+    "descriptionPlaceholder": "Təsvir",
+    "noDeadlinePlaceholder": "Son tarix yoxdur",
+
+
+    "btnCancel": "Ləğv et",
+    "btnSave": "Yadda saxla",
+    "btnAdd": "Əlavə et",
+    "btnUpdate": "Yenilə",
+    "btnDelete": "Sil",
+    "btnSearch": "Axtar"
+}

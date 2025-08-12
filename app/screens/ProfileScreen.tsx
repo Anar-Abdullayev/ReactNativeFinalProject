@@ -1,13 +1,19 @@
+import { setProfile } from '@/store/profile/profileSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
 
-export default function ProfileScreen() {
+import { useTranslation } from 'react-i18next';
+import '../../lib/translation';
+
+export default function ProfileScreen({onSave}: { onSave?: () => void }) {
+    const { t } = useTranslation();
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [imageUri, setImageUri] = useState<string | null>(null);
-
+    const dispatch = useDispatch<any>();
     useEffect(() => {
         loadProfile();
     }, []);
@@ -35,7 +41,12 @@ export default function ProfileScreen() {
         try {
             const profile = { name, surname, imageUri };
             await AsyncStorage.setItem('userProfile', JSON.stringify(profile));
+
             Alert.alert("Success", "Profile saved successfully!");
+            dispatch(setProfile(name));
+            if (onSave) {
+                onSave();
+            }
         } catch (error) {
             console.error('Failed to save profile:', error);
         }
@@ -62,22 +73,22 @@ export default function ProfileScreen() {
                         source={imageUri ? { uri: imageUri } : require('../../assets/avatar-placeholder.png')}
                         style={styles.avatar}
                     />
-                    <Text style={styles.changePhotoText}>Change Photo</Text>
+                    <Text style={styles.changePhotoText}>{t('changePhoto')}</Text>
                 </TouchableOpacity>
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Name"
+                    placeholder={t('namePlaceholder')}
                     value={name}
                     onChangeText={setName}
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="Surname"
+                    placeholder={t('surnamePlaceholder')}
                     value={surname}
                     onChangeText={setSurname}
                 />
-                <Button title="Save Profile" onPress={saveProfile} />
+                <Button title={t('btnSave')} onPress={saveProfile} />
         </SafeAreaView>
     );
 }

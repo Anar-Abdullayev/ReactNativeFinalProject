@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    Image,
-    Keyboard,
-    Linking,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Keyboard,
+  Linking,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+
+import { useTranslation } from 'react-i18next';
+import '../../lib/translation';
 
 const API_KEY = "7e0e00ac05934f11957be8c6a417d1c8";
 
@@ -33,6 +36,7 @@ function getDateFrom30DaysAgo() {
 }
 
 export default function NewsScreen() {
+  const { t } = useTranslation();
   const [articles, setArticles] = useState<Article[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -144,13 +148,13 @@ export default function NewsScreen() {
         <TextInput
           value={searchText}
           onChangeText={setSearchText}
-          placeholder="Search news..."
+          placeholder={t('newsSearchPlaceholder')}
           style={styles.searchInput}
           returnKeyType="search"
           onSubmitEditing={onSearch}
         />
         <TouchableOpacity style={styles.searchButton} onPress={onSearch}>
-          <Text style={{ color: "#fff", fontWeight: "600" }}>Search</Text>
+          <Text style={{ color: "#fff", fontWeight: "600" }}>{t('btnSearch')}</Text>
         </TouchableOpacity>
       </View>
 

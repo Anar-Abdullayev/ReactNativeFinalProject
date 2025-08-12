@@ -1,35 +1,29 @@
 import HomeCard from '@/components/HomeCard';
 import { Colors } from '@/constants/Colors';
-import { User } from '@/constants/User';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import '../../lib/translation';
 
 const CARD_DATA = [
-  { title: 'Notes', key: 'notes', icon: 'note-outline' },
-  { title: 'Weather', key: 'weather', icon: 'weather-partly-snowy-rainy' },
-  { title: 'Tasks', key: 'tasks', icon: 'check-network-outline' },
-  { title: 'News', key: 'news', icon: 'newspaper' },
+  { title: 'notesLabel', key: 'notes', icon: 'note-outline' },
+  { title: 'weatherLabel', key: 'weather', icon: 'weather-partly-snowy-rainy' },
+  { title: 'tasksLabel', key: 'tasks', icon: 'check-network-outline' },
+  { title: 'newsLabel', key: 'news', icon: 'newspaper' },
 ];
 
 
 const HomeScreen = () => {
-  const [userData, setUserData] = useState<User>();
+  const { name } = useSelector((state: any) => state.profile);
   const numColumns = 2;
-  useEffect(() => {
-    (async () => {
-      const userData = await AsyncStorage.getItem('userProfile');
-      if (userData) {
-        const user: User = JSON.parse(userData);
-        setUserData(user);
-      }
-    })()
-  }, [])
+  const { t } = useTranslation();
+  
   return (
       <View style={[styles.container]}>
-        {userData &&
+        {name &&
           <View>
-            <Text style={styles.helloTitle}>Salam, {userData.name}</Text>
+            <Text style={styles.helloTitle}>{t('welcome')}, {name}</Text>
           </View>
         }
 

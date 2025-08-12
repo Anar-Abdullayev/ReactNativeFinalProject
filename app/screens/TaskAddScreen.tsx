@@ -17,8 +17,12 @@ import {
 import { useDispatch } from 'react-redux';
 import { Task } from "../../constants/Task";
 
+import { useTranslation } from 'react-i18next';
+import '../../lib/translation';
+
 
 export default function TaskAddScreen({navigation} : any) {
+    const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [isCompleted, setIsCompleted] = useState(false);
@@ -76,24 +80,24 @@ export default function TaskAddScreen({navigation} : any) {
     };
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Title</Text>
+            <Text style={styles.label}>{t('titlePlaceholder')}</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Enter task title"
+                placeholder={t('titlePlaceholder')}
                 value={title}
                 onChangeText={setTitle}
             />
 
-            <Text style={styles.label}>Description</Text>
+            <Text style={styles.label}>{t('descriptionPlaceholder')}</Text>
             <TextInput
                 style={[styles.input, styles.multiline]}
-                placeholder="Enter task description"
+                placeholder={t('descriptionPlaceholder')}
                 value={description}
                 onChangeText={setDescription}
                 multiline
             />
 
-            <Text style={styles.label}>Deadline</Text>
+            <Text style={styles.label}>{t('deadline')}</Text>
             <TouchableOpacity
                 style={styles.dateButton}
                 onPress={() => {
@@ -101,7 +105,7 @@ export default function TaskAddScreen({navigation} : any) {
                     setDeadline(deadline ? deadline : new Date())
                 }}
             >
-                <Text>{deadline ? deadline.toLocaleString('az') : 'No deadline'}</Text>
+                <Text>{deadline ? deadline.toLocaleString('az') : t('noDeadlinePlaceholder')}</Text>
                 {deadline &&
                     <View style={{ position: 'absolute', right: 10, top: 10 }}>
                         <TouchableOpacity onPress={() => {
@@ -134,12 +138,12 @@ export default function TaskAddScreen({navigation} : any) {
             )}
 
             <View style={styles.switchContainer}>
-                <Text style={styles.label}>Completed</Text>
+                <Text style={styles.label}>{t('taskStatusLabel')}</Text>
                 <Switch value={isCompleted} onValueChange={setIsCompleted} />
             </View>
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                <Text style={styles.saveButtonText}>Save Task</Text>
+                <Text style={styles.saveButtonText}>{t('btnAdd')}</Text>
             </TouchableOpacity>
         </View>
     );

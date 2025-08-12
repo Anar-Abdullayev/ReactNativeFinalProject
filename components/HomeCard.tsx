@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from "expo-router";
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
+import '../lib/translation';
 
 const getColor = (key: string) => {
     let color = ''
@@ -43,11 +45,12 @@ const cardWidth = (screenWidth - cardMargin * 3) / 2;
 
 export default function HomeCard({ item }: any) {
     const navigation = useNavigation<any>();
+    const { t } = useTranslation();
 
     return (
         <TouchableOpacity style={[styles.card, { backgroundColor: getColor(item.key) }]} onPress={() => navigation.navigate(item.key)}>
             {renderIcon(item.key)}
-            <Text style={styles.cardText}>{item.title}</Text>
+            <Text style={styles.cardText}>{t(item.title)}</Text>
         </TouchableOpacity>
     )
 }
