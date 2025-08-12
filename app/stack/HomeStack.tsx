@@ -11,7 +11,8 @@ import TasksScreen from "../screens/TasksScreen";
 import WeatherScreen from "../screens/WeatherScreen";
 
 const MyStack = createStackNavigator();
-export default function HomeStack() {
+export default function HomeStack({ navigation }: any) {
+
   return (
     <Provider store={store}>
       <MyStack.Navigator>
@@ -23,7 +24,7 @@ export default function HomeStack() {
         <MyStack.Screen
           name="profile"
           component={ProfileScreen}
-          options={{ title: "Profile" }}
+          options={{ title: "Profile", headerShown: false }}
         />
         <MyStack.Screen
           name="tasks"

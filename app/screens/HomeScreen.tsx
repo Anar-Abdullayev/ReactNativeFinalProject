@@ -26,22 +26,22 @@ const HomeScreen = () => {
     })()
   }, [])
   return (
-    <View style={[styles.container]}>
-      {userData &&
-        <View>
-          <Text style={styles.helloTitle}>Salam, {userData.name}</Text>
-        </View>
-      }
+      <View style={[styles.container]}>
+        {userData &&
+          <View>
+            <Text style={styles.helloTitle}>Salam, {userData.name}</Text>
+          </View>
+        }
 
-      <FlatList
-        data={CARD_DATA}
-        renderItem={({ item }) => <HomeCard item={item} />}
-        numColumns={numColumns}
-        columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+        <FlatList
+          data={CARD_DATA}
+          renderItem={({ item }) => <HomeCard item={item} />}
+          numColumns={numColumns}
+          columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
   );
 };
 
