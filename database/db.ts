@@ -56,6 +56,20 @@ export const fetchTaskById = async (taskId: number) => {
   return data;
 };
 
+const addTask = async (task: Task) => {
+  const db = await getDB();
+  const result = await db.runAsync(
+    "INSERT INTO tasks (title, description, is_completed, deadline) VALUES (?, ?, ?, ?)", [
+    task.title,
+    task.description ? task.description : '',
+    task.is_completed ? 1 : 0,
+    task.deadline ? task.deadline : ''
+  ]
+  );
+  task.id = result.lastInsertRowId;
+  return task;
+};
+
 export const deleteTask = async (taskId: number) => {
   const db = await getDB();
   await db.runAsync("DELETE FROM tasks WHERE id = ?", taskId);
@@ -71,3 +85,5 @@ export const updateTaskStatus = async (
     taskId,
   ]);
 };
+
+export const tasksService = { fetchTasks, fetchTaskById, addTask, deleteTask, updateTaskStatus }

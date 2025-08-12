@@ -2,12 +2,13 @@ import { Note } from "@/constants/Note";
 import { Guid } from "js-guid";
 import React, { useEffect, useState } from "react";
 import {
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 type Props = {
@@ -37,7 +38,10 @@ export default function NoteModal({
   }, [noteToEdit, visible]);
 
   const handleSave = () => {
-    if (!title.trim()) return; // prevent empty title
+    if (!title.trim()) {
+      Alert.alert('Empty Title', 'Title cannot be empty!')
+      return;
+    }
     const note: Note = {
       id: noteToEdit?.id || Guid.EMPTY,
       title: title.trim(),

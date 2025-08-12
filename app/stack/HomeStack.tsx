@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import NewsScreen from "../screens/NewsScreen";
 import NotesListScreen from "../screens/NotesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import TaskAddScreen from "../screens/TaskAddScreen";
 import TaskDetailScreen from "../screens/TaskDetailScreen";
 import TasksScreen from "../screens/TasksScreen";
 import WeatherScreen from "../screens/WeatherScreen";
@@ -33,6 +34,11 @@ export default function HomeStack() {
           name="taskdetail"
           component={TaskDetailScreen}
           options={{ title: "Details" }}
+        />
+        <MyStack.Screen
+          name="taskadd"
+          component={TaskAddScreen}
+          options={{ title: "New Task" }}
         />
         <MyStack.Screen
           name="notes"

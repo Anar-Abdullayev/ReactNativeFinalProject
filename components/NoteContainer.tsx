@@ -1,4 +1,6 @@
 import { Note } from "@/constants/Note";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {
   Animated,
   StyleSheet,
@@ -47,10 +49,10 @@ export default function NoteContainer({
       {note.isEditing && (
         <View style={styles.buttons}>
           <TouchableOpacity onPress={() => onEdit(note.id)}>
-            <Text>Edit</Text>
+            <FontAwesome name="edit" size={20} color="blue" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onDelete(note.id)}>
-            <Text>Delete</Text>
+            <MaterialIcons name="delete-forever" size={20} color="red" />
           </TouchableOpacity>
         </View>
       )}
@@ -77,9 +79,10 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: 'flex-end',
+    gap: 10,
     position: "absolute",
-    bottom: -15,
+    bottom: -10,
     left: 0,
     right: 0,
   },

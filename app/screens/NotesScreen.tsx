@@ -85,9 +85,9 @@ const NotesListScreen = () => {
 
         const size = noteSizes.current[note.id] || { width: 100, height: 100 };
         const minX = -noteSizes.current[note.id].width / 2;
-        const maxX = windowWidth - size.width+ noteSizes.current[note.id].width / 2;
+        const maxX = windowWidth - size.width + noteSizes.current[note.id].width / 2;
         const headerHeight = 56;
-        const minY = -noteSizes.current[note.id].height/2;
+        const minY = -noteSizes.current[note.id].height / 2;
         const maxY = windowHeight - headerHeight - insets.bottom - size.height;
         if (newX < minX) newX = minX;
         if (newX > maxX) newX = maxX;
@@ -136,7 +136,6 @@ const NotesListScreen = () => {
   };
 
   const handleSaveNote = async (note: Note) => {
-    console.log("Saving note:", note);
     if (note.id !== Guid.EMPTY) {
       setNotes((prev) =>
         prev.map((n) => (n.id === note.id ? { ...n, ...note } : n))

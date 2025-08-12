@@ -1,54 +1,41 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Ionicons } from '@expo/vector-icons';
+import HomeCard from '@/components/HomeCard';
+import { Colors } from '@/constants/Colors';
+import { User } from '@/constants/User';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 const CARD_DATA = [
   { title: 'Notes', key: 'notes', icon: 'note-outline' },
   { title: 'Weather', key: 'weather', icon: 'weather-partly-snowy-rainy' },
   { title: 'Tasks', key: 'tasks', icon: 'check-network-outline' },
   { title: 'News', key: 'news', icon: 'newspaper' },
-  { title: 'Profile', key: 'profile', icon: 'face-man-profile' },
-  { title: 'Settings', key: 'settings', icon: 'settings-outline' },
 ];
 
-const renderIcon = (key: string) => {
-  const iconSize = 80;
-  const iconColor = 'black'
-  let content;
-  if (key === 'notes')
-    content = <MaterialCommunityIcons name='note-outline' size={iconSize} color={iconColor}/>
-  else if (key === 'weather')
-    content = <MaterialCommunityIcons name='weather-partly-snowy-rainy' size={iconSize} color={iconColor}/>
-  else if (key === 'tasks')
-    content = <MaterialCommunityIcons name='check-network-outline' size={iconSize} color={iconColor}/>
-  else if (key === 'news')
-    content = <MaterialCommunityIcons name='newspaper' size={iconSize} color={iconColor}/>
-  else if (key === 'profile')
-    content = <MaterialCommunityIcons name='face-man-profile' size={iconSize} color={iconColor}/>
-  else if (key === 'settings')
-    content = <Ionicons name='settings-outline' size={iconSize} color={iconColor}/>
-  return content;
-}
 
 const HomeScreen = () => {
-  const navigation = useNavigation<any>();
-
+  const [userData, setUserData] = useState<User>();
   const numColumns = 2;
-
-  const renderItem = ({ item }: { item: { title: string; key: string, icon: string } }) => (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.key)}>
-      {renderIcon(item.key)}
-      <Text style={styles.cardText}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
+  useEffect(() => {
+    (async () => {
+      const userData = await AsyncStorage.getItem('userProfile');
+      if (userData) {
+        const user: User = JSON.parse(userData);
+        setUserData(user);
+      }
+    })()
+  }, [])
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
+      {userData &&
+        <View>
+          <Text style={styles.helloTitle}>Salam, {userData.name}</Text>
+        </View>
+      }
+
       <FlatList
         data={CARD_DATA}
-        renderItem={renderItem}
+        renderItem={({ item }) => <HomeCard item={item} />}
         numColumns={numColumns}
         columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
         contentContainerStyle={styles.list}
@@ -58,22 +45,12 @@ const HomeScreen = () => {
   );
 };
 
-const screenWidth = Dimensions.get('window').width;
-const cardMargin = 12;
-const cardWidth = (screenWidth - cardMargin * 3) / 2;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
-    backgroundColor: '#f2f4f7',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
+    backgroundColor: Colors.light.background,
   },
   list: {
     paddingBottom: 20,
@@ -82,25 +59,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 16,
   },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: cardWidth,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-  },
-  cardText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#222',
-  },
+  helloTitle: {
+    fontSize: 36,
+    marginBottom: 20,
+    fontStyle: 'italic'
+  }
 });
 
 export default HomeScreen;

@@ -1,5 +1,5 @@
 import { Task } from "@/constants/Task";
-import { deleteTask, fetchTaskById, updateTaskStatus } from "@/database/db";
+import { tasksService } from "@/database/db";
 import { removeTask, updateTask } from "@/store/tasks/tasksSlice";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ export default function TaskDetailScreen() {
  const dispatch = useDispatch();
   useEffect(() => {
     const getTask = async () => {
-      const data = await fetchTaskById(taskId);
+      const data = await tasksService.fetchTaskById(taskId);
       navigation.setOptions({ title: data?.title || "Task Details" });
       setTask(data);
     };
@@ -37,7 +37,7 @@ export default function TaskDetailScreen() {
   }
 
   const handleToggleComplete = async () => {
-    await updateTaskStatus(task.id, !task.is_completed);
+    await tasksService.updateTaskStatus(task.id, !task.is_completed);
     setTask({ ...task, is_completed: task.is_completed === 1 ? 0 : 1 });
     const payload: any = {
       taskId,
@@ -47,7 +47,7 @@ export default function TaskDetailScreen() {
   };
 
   const handleDelete = async () => {
-    await deleteTask(task.id);
+    await tasksService.deleteTask(task.id);
     dispatch(removeTask(task.id));
     navigation.goBack();
   };
