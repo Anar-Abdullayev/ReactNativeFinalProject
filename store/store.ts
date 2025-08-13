@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import profileReducer from "./profile/profileSlice";
+import settingsReducer from "./settings/settingsSlice";
 import tasksReducer from "./tasks/tasksSlice";
 import weatherReducer from "./weather/weatherSlice";
 
@@ -8,6 +9,7 @@ export const store = configureStore({
         tasks: tasksReducer,
         weather: weatherReducer,
         profile: profileReducer,
+        settings: settingsReducer
     },
 });
 

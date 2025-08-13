@@ -2,13 +2,13 @@ import { setProfile } from '@/store/profile/profileSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Button, Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
 import '../../lib/translation';
 
-export default function ProfileScreen({onSave}: { onSave?: () => void }) {
+export default function ProfileScreen() {
     const { t } = useTranslation();
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -44,9 +44,6 @@ export default function ProfileScreen({onSave}: { onSave?: () => void }) {
 
             Alert.alert("Success", "Profile saved successfully!");
             dispatch(setProfile(name));
-            if (onSave) {
-                onSave();
-            }
         } catch (error) {
             console.error('Failed to save profile:', error);
         }
@@ -67,28 +64,30 @@ export default function ProfileScreen({onSave}: { onSave?: () => void }) {
     };
 
     return (
-        <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0}]}>
-                <TouchableOpacity onPress={pickImage}>
+        <SafeAreaView style={[styles.container, { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 }]}>
+            <TouchableOpacity onPress={pickImage}>
+                <View style={{ alignItems: 'center' }}>
                     <Image
                         source={imageUri ? { uri: imageUri } : require('../../assets/avatar-placeholder.png')}
                         style={styles.avatar}
                     />
                     <Text style={styles.changePhotoText}>{t('changePhoto')}</Text>
-                </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder={t('namePlaceholder')}
-                    value={name}
-                    onChangeText={setName}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder={t('surnamePlaceholder')}
-                    value={surname}
-                    onChangeText={setSurname}
-                />
-                <Button title={t('btnSave')} onPress={saveProfile} />
+            <TextInput
+                style={styles.input}
+                placeholder={t('namePlaceholder')}
+                value={name}
+                onChangeText={setName}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder={t('surnamePlaceholder')}
+                value={surname}
+                onChangeText={setSurname}
+            />
+            <Button title={t('btnSave')} onPress={saveProfile} />
         </SafeAreaView>
     );
 }

@@ -2,6 +2,12 @@
     "welcome": "Welcome",
     
 
+    "drawerHome": "Home",
+    "drawerProfile": "Profile",
+    "drawerSettings": "Settings",
+
+
+    "HOME_SCREEN_CARD_LABELS": "",
     "notesLabel": "Notes",
     "weatherLabel": "Weather Forecast",
     "tasksLabel": "Tasks",
@@ -15,6 +21,7 @@
     "headerEditNote": "Edit Note",
 
 
+    "WEATHER_SCREEN_LANGUAGE": "",
     "weatherCityPlaceholder": "Search city...",
     "feelsLike": "Feels like",
     "humidity": "Humidity",
@@ -24,6 +31,11 @@
     "sunset": "Sunset",
 
 
+    "SETTINGS_SCREEN_TEXT": "",
+    "languageText": "Language",
+    "themeText": "Theme",
+
+    
     "allTasks": "All",
     "completedTasks": "Completed",
     "uncompletedTasks": "Pending",
@@ -49,9 +61,13 @@
 
 
     "btnCancel": "Cancel",
+    "btnYes": "Yes",
     "btnSave": "Save",
     "btnAdd": "Add",
     "btnUpdate": "Update",
     "btnDelete": "Delete",
-    "btnSearch": "Search"
+    "btnSearch": "Search",
+    "btnLogout": "Logout",
+
+    "logoutMessage": "Are you sure you want to log out?"
 }

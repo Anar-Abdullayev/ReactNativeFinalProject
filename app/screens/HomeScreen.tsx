@@ -15,27 +15,28 @@ const CARD_DATA = [
 
 
 const HomeScreen = () => {
-  const { name } = useSelector((state: any) => state.profile);
-  const numColumns = 2;
   const { t } = useTranslation();
-  
+  const { name } = useSelector((state: any) => state.profile);
+  const { isDarkTheme } = useSelector((state: any) => state.settings);
+  const theme = isDarkTheme ? Colors.dark : Colors.light
+  const numColumns = 2;
   return (
-      <View style={[styles.container]}>
-        {name &&
-          <View>
-            <Text style={styles.helloTitle}>{t('welcome')}, {name}</Text>
-          </View>
-        }
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      {name &&
+        <View>
+          <Text style={[styles.helloTitle, {color: theme.text}]}>{t('welcome')}, {name}</Text>
+        </View>
+      }
 
-        <FlatList
-          data={CARD_DATA}
-          renderItem={({ item }) => <HomeCard item={item} />}
-          numColumns={numColumns}
-          columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
-          contentContainerStyle={styles.list}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      <FlatList
+        data={CARD_DATA}
+        renderItem={({ item }) => <HomeCard item={item} />}
+        numColumns={numColumns}
+        columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
+        contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 };
 
@@ -44,7 +45,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
-    backgroundColor: Colors.light.background,
   },
   list: {
     paddingBottom: 20,

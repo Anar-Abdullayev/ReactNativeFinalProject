@@ -1,5 +1,6 @@
 import { createTables } from "@/database/db";
-import { loadProfile } from "@/store/profile/profileSlice";
+import { loadProfile, logoutProfile } from "@/store/profile/profileSlice";
+import { loadSettings } from "@/store/settings/settingsSlice";
 import { store } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -10,30 +11,38 @@ import {
   DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { CommonActions } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, View } from "react-native";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import '../lib/translation';
 import ProfileScreen from "./screens/ProfileScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import HomeStack from "./stack/HomeStack";
 
-import { useTranslation } from 'react-i18next';
-import '../lib/translation';
-
 const Drawer = createDrawerNavigator();
 
 export default function RootLayout() {
-  const [initialRouteName, setInitialRouteName] = useState<string | null>(null);
-  const { t, i18n } = useTranslation();
+  return (
+    <Provider store={store}>
+      <AppWrapper />
+    </Provider>
+  );
+}
+
+function AppWrapper() {
+  const dispatch = useDispatch<any>();
+  const { hasProfile, loading } = useSelector((state: any) => state.profile)
+  const { language, isDarkTheme } = useSelector((state: any) => state.settings)
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    dispatch(loadProfile())
+    dispatch(loadSettings())
+  }, [])
 
   useEffect(() => {
-    (async () => {
-      const profile = await AsyncStorage.getItem("userProfile");
-
-      setInitialRouteName(profile ? "home" : "profile");
-    })();
-  }, []);
+    i18n.changeLanguage(language);
+  }, [language])
 
   useEffect(() => {
     (async () => {
@@ -41,7 +50,7 @@ export default function RootLayout() {
     })();
   }, []);
 
-  if (!initialRouteName) {
+  if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
@@ -50,29 +59,22 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
-      {initialRouteName === "profile" ? (
-        <ProfileScreen onSave={() => setInitialRouteName("home")} />
+    <>
+      {!hasProfile ? (
+        <ProfileScreen />
       ) : (
         <DrawerWithData
-          onLogOut={() => setInitialRouteName("profile")}
-          initialRouteName={initialRouteName}
         />
       )}
-    </Provider>
-  );
+    </>
+  )
 }
 
 function DrawerWithData({ onLogOut, initialRouteName }: any) {
-  const dispatch = useDispatch<any>();
-
-  useEffect(() => {
-    dispatch(loadProfile());
-  }, []);
-
+  const { t } = useTranslation();
   return (
     <Drawer.Navigator
-      initialRouteName={initialRouteName}
+      initialRouteName='home'
       screenOptions={{
         headerShown: false,
         drawerLabelStyle: { fontSize: 20 },
@@ -84,7 +86,7 @@ function DrawerWithData({ onLogOut, initialRouteName }: any) {
       <Drawer.Screen
         name="home"
         options={{
-          title: "Home",
+          title: t('drawerHome'),
           drawerIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
@@ -95,7 +97,7 @@ function DrawerWithData({ onLogOut, initialRouteName }: any) {
       <Drawer.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t('drawerProfile'),
           drawerIcon: ({ color, size }) => (
             <Ionicons name="person-circle-outline" size={size} color={color} />
           ),
@@ -105,7 +107,7 @@ function DrawerWithData({ onLogOut, initialRouteName }: any) {
       <Drawer.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: t('drawerSettings'),
           drawerIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={size} color={color} />
           ),
@@ -117,22 +119,18 @@ function DrawerWithData({ onLogOut, initialRouteName }: any) {
 }
 
 const CustomDrawerContent = (props: any) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch<any>();
   const handleLogout = async () => {
-    props.onLogOut();
     await AsyncStorage.removeItem("userProfile");
-    props.navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "profile" }],
-      })
-    );
+    dispatch(logoutProfile());
   };
 
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
       <DrawerItem
-        label="Logout"
+        label={t('btnLogout')}
         labelStyle={{ fontSize: 20 }}
         icon={({ color, size }) => (
           <AntDesign name="logout" size={size} color={color} />

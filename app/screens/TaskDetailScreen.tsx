@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { Task } from "@/constants/Task";
 import { tasksService } from "@/database/db";
 import { removeTask, updateTask } from "@/store/tasks/tasksSlice";
@@ -6,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from "react-native";
 import { Button, Card, Chip, Text } from "react-native-paper";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import '../../lib/translation';
 
 type RootStackParamList = {
@@ -16,12 +17,14 @@ type RootStackParamList = {
 type TaskDetailRouteProp = RouteProp<RootStackParamList, "TaskDetail">;
 
 export default function TaskDetailScreen() {
+  const { isDarkTheme } = useSelector((state: any) => state.settings);
+  const theme = isDarkTheme ? Colors.dark : Colors.light;
   const { t } = useTranslation();
   const route = useRoute<TaskDetailRouteProp>();
   const navigation = useNavigation<any>();
   const { taskId } = route.params;
   const [task, setTask] = useState<Task | null>(null);
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
   useEffect(() => {
     const getTask = async () => {
       const data = await tasksService.fetchTaskById(taskId);
@@ -56,8 +59,8 @@ export default function TaskDetailScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, padding: 10 }}>
-      <Card>
+    <ScrollView style={{ flex: 1, padding: 10, backgroundColor: theme.background }}>
+      <Card style={isDarkTheme ? { backgroundColor: theme.tabIconDefault } : {}}>
         <Card.Content>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}

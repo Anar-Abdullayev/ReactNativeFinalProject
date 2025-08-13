@@ -14,14 +14,17 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Task } from "../../constants/Task";
 
+import { Colors } from '@/constants/Colors';
 import { useTranslation } from 'react-i18next';
 import '../../lib/translation';
 
 
-export default function TaskAddScreen({navigation} : any) {
+export default function TaskAddScreen({ navigation }: any) {
+    const { isDarkTheme } = useSelector((state: any) => state.settings);
+    const theme = isDarkTheme ? Colors.dark : Colors.light;
     const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -53,7 +56,7 @@ export default function TaskAddScreen({navigation} : any) {
     const onChangeTime = (event: DateTimePickerEvent, selectedTime?: Date) => {
         setShowTimePicker(false);
         if (event.type !== 'dismissed' && selectedTime) {
-            const currentDeadline =  deadline ? new Date(deadline) : new Date();
+            const currentDeadline = deadline ? new Date(deadline) : new Date();
             currentDeadline.setHours(selectedTime.getHours());
             currentDeadline.setMinutes(selectedTime.getMinutes());
             currentDeadline.setSeconds(0);
@@ -65,7 +68,8 @@ export default function TaskAddScreen({navigation} : any) {
     const handleSave = async () => {
         if (!title.trim()) {
             Alert.alert('Input error', 'You can not leave title empty!')
-            return;}
+            return;
+        }
 
         let newTask: Task = {
             id: 0,
@@ -79,25 +83,27 @@ export default function TaskAddScreen({navigation} : any) {
         navigation.goBack();
     };
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>{t('titlePlaceholder')}</Text>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
+            <Text style={[styles.label, { color: theme.text }]}>{t('titlePlaceholder')}</Text>
             <TextInput
-                style={styles.input}
+                style={[styles.input, { color: theme.text }]}
                 placeholder={t('titlePlaceholder')}
+                placeholderTextColor={theme.text}
                 value={title}
                 onChangeText={setTitle}
             />
 
-            <Text style={styles.label}>{t('descriptionPlaceholder')}</Text>
+            <Text style={[styles.label, { color: theme.text }]}>{t('descriptionPlaceholder')}</Text>
             <TextInput
                 style={[styles.input, styles.multiline]}
                 placeholder={t('descriptionPlaceholder')}
                 value={description}
+                placeholderTextColor={theme.text}
                 onChangeText={setDescription}
                 multiline
             />
 
-            <Text style={styles.label}>{t('deadline')}</Text>
+            <Text style={[styles.label, { color: theme.text }]}>{t('deadline')}</Text>
             <TouchableOpacity
                 style={styles.dateButton}
                 onPress={() => {
@@ -105,7 +111,7 @@ export default function TaskAddScreen({navigation} : any) {
                     setDeadline(deadline ? deadline : new Date())
                 }}
             >
-                <Text>{deadline ? deadline.toLocaleString('az') : t('noDeadlinePlaceholder')}</Text>
+                <Text style={{color:theme.text}}>{deadline ? deadline.toLocaleString('az') : t('noDeadlinePlaceholder')}</Text>
                 {deadline &&
                     <View style={{ position: 'absolute', right: 10, top: 10 }}>
                         <TouchableOpacity onPress={() => {
@@ -138,8 +144,10 @@ export default function TaskAddScreen({navigation} : any) {
             )}
 
             <View style={styles.switchContainer}>
-                <Text style={styles.label}>{t('taskStatusLabel')}</Text>
-                <Switch value={isCompleted} onValueChange={setIsCompleted} />
+                <Text style={[styles.label, { color: theme.text }]}>{t('taskStatusLabel')}</Text>
+                <Switch trackColor={{
+                    false: isDarkTheme ? 'white' : '#9c9c9cff'
+                }} value={isCompleted} onValueChange={setIsCompleted} />
             </View>
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -154,7 +162,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: "#fff",
     },
     label: {
         fontSize: 16,

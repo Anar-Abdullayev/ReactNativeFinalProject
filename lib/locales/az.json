@@ -2,6 +2,12 @@
     "welcome": "Xoş gəlmisiniz",
     
 
+    "drawerHome": "Ana səhifə",
+    "drawerProfile": "Profil",
+    "drawerSettings": "Ayarlar",
+
+
+    "HOME_SCREEN_CARD_LABELS": "",
     "notesLabel": "Qeydlər",
     "weatherLabel": "Hava durumu",
     "tasksLabel": "Tapşırıqlar",
@@ -15,6 +21,7 @@
     "headerEditNote": "Qeyd redaktə et",
 
 
+    "WEATHER_SCREEN_LANGUAGE": "",
     "weatherCityPlaceholder": "Şəhər adını daxil edin...",
     "feelsLike": "Hiss olunur",
     "humidity": "Rütubət",
@@ -22,6 +29,11 @@
     "windSpeed": "Külək sürəti",
     "sunrise": "Günəş doğması",
     "sunset": "Günəş batması",
+
+
+    "SETTINGS_SCREEN_TEXT": "",
+    "languageText": "Dil",
+    "themeText": "Tema",
 
 
     "allTasks": "Bütün",
@@ -49,9 +61,13 @@
 
 
     "btnCancel": "Ləğv et",
+    "btnYes": "BƏLİ",
     "btnSave": "Yadda saxla",
     "btnAdd": "Əlavə et",
     "btnUpdate": "Yenilə",
     "btnDelete": "Sil",
-    "btnSearch": "Axtar"
+    "btnSearch": "Axtar",
+    "btnLogout": "Çıxış",
+    
+    "logoutMessage": "Çıxış etmək istədiyinizdən əminsiniz?"
 }

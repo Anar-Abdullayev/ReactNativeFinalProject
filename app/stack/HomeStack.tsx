@@ -9,12 +9,16 @@ import TaskDetailScreen from "../screens/TaskDetailScreen";
 import TasksScreen from "../screens/TasksScreen";
 import WeatherScreen from "../screens/WeatherScreen";
 
+import { Colors } from "@/constants/Colors";
 import { useTranslation } from 'react-i18next';
+import { useSelector } from "react-redux";
 import '../../lib/translation';
 
 
 const MyStack = createStackNavigator();
 export default function HomeStack({ navigation }: any) {
+  const {isDarkTheme} = useSelector((state:any) => state.settings);
+  const theme = isDarkTheme ? Colors.dark : Colors.light;
   const [initialLaunch, setInitialLaunch] = useState(true);
   const { t } = useTranslation();
   if (initialLaunch) {
@@ -23,7 +27,13 @@ export default function HomeStack({ navigation }: any) {
     );
   }
   return (
-    <MyStack.Navigator>
+    <MyStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: theme.background,
+        },
+        headerTintColor: theme.text
+      }}>
       <MyStack.Screen
         name="homecards"
         component={HomeScreen}

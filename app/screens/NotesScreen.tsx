@@ -1,6 +1,7 @@
 import NoteModal from "@/components/AddNoteModal";
 import AddButton from "@/components/buttons/AddButton";
 import NoteContainer from "@/components/NoteContainer";
+import { Colors } from "@/constants/Colors";
 import { Note } from "@/constants/Note";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Guid } from "js-guid";
@@ -15,10 +16,13 @@ import {
   View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 const STORAGE_KEY = "NOTES";
 
 const NotesListScreen = () => {
+  const { isDarkTheme } = useSelector((state:any) => state.settings);
+  const theme = isDarkTheme ? Colors.dark : Colors.light;
   const [notes, setNotes] = useState<Note[]>([]);
   const positions = useRef<Record<string, Animated.ValueXY>>({});
   const [zIndexCounter, setZIndexCounter] = useState(1);
@@ -186,7 +190,7 @@ const NotesListScreen = () => {
     });
   return (
     <TouchableWithoutFeedback onPress={() => clearEditMode()}>
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: theme.background}]}>
         {renderNotes()}
         <NoteModal
           onClose={() => {
@@ -208,6 +212,5 @@ export default NotesListScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8ff",
   },
 });
